@@ -110,7 +110,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
       {/* Physical Limits Matrix Banner */}
       <div className="p-4 sm:p-5 rounded-2xl bg-slate-900 border border-slate-800/90 shadow-md space-y-3">
         <h3 className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider flex items-center space-x-2">
-          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+          <GitFork className="w-4 h-4 text-purple-400 shrink-0" />
           <span>Active Material Physical Pressure Limits</span>
         </h3>
 

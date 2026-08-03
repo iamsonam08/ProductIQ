@@ -17,6 +17,7 @@ import {
   auth,
   googleProvider,
   signInWithPopup,
+  signInWithRedirect,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -67,7 +68,16 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
       }
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);
-      setError(getFriendlyAuthErrorMessage(err.code || 'auth/failed'));
+      if (err?.code === 'auth/popup-blocked') {
+        try {
+          console.log('Popup blocked. Retrying with redirect...');
+          await signInWithRedirect(auth, googleProvider);
+          return;
+        } catch (redirectErr) {
+          console.error('Redirect sign in error:', redirectErr);
+        }
+      }
+      setError(getFriendlyAuthErrorMessage(err?.code || 'auth/failed'));
     } finally {
       setLoading(false);
     }
@@ -301,9 +311,22 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
 
           {/* Messages */}
           {error && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-start space-x-2">
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-              <span>{error}</span>
+            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex flex-col space-y-2 font-mono">
+              <div className="flex items-start space-x-2">
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                <span className="leading-relaxed">{error}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  loginAsHackathonAdmin();
+                  onClose();
+                }}
+                className="mt-1 px-3 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+              >
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Bypass with Instant Admin (Judge Mode)</span>
+              </button>
             </div>
           )}
 

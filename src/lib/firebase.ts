@@ -4,6 +4,8 @@ import {
   Auth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -16,6 +18,7 @@ import {
 } from 'firebase/auth';
 import {
   getFirestore,
+  initializeFirestore,
   Firestore,
   doc,
   getDoc,
@@ -33,13 +36,13 @@ import firebaseConfigData from '../../firebase-applet-config.json';
 
 // Initialize Firebase
 const firebaseConfig = {
-  projectId: firebaseConfigData.projectId,
-  appId: firebaseConfigData.appId,
-  apiKey: firebaseConfigData.apiKey,
-  authDomain: firebaseConfigData.authDomain,
-  firestoreDatabaseId: firebaseConfigData.firestoreDatabaseId,
-  storageBucket: firebaseConfigData.storageBucket,
-  messagingSenderId: firebaseConfigData.messagingSenderId,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigData.projectId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfigData.appId,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigData.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigData.authDomain,
+  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || firebaseConfigData.firestoreDatabaseId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigData.storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigData.messagingSenderId,
 };
 
 let app: FirebaseApp;
@@ -50,9 +53,22 @@ if (!getApps().length) {
 }
 
 export const auth: Auth = getAuth(app);
-export const db: Firestore = firebaseConfigData.firestoreDatabaseId
-  ? getFirestore(app, firebaseConfigData.firestoreDatabaseId)
-  : getFirestore(app);
+
+// Use initializeFirestore with experimentalAutoDetectLongPolling to prevent 10s backend gRPC connection timeouts in container/iframe environments
+export const db: Firestore = (() => {
+  try {
+    const settings = { experimentalAutoDetectLongPolling: true };
+    if (firebaseConfig.firestoreDatabaseId) {
+      return initializeFirestore(app, settings, firebaseConfig.firestoreDatabaseId);
+    }
+    return initializeFirestore(app, settings);
+  } catch (err) {
+    console.warn('initializeFirestore fallback to default getFirestore:', err);
+    return firebaseConfig.firestoreDatabaseId
+      ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+      : getFirestore(app);
+  }
+})();
 
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
@@ -136,6 +152,10 @@ export async function logAdminActivity(action: string, performedBy: string, deta
 // Helper to format Firebase errors nicely
 export function getFriendlyAuthErrorMessage(errorCode: string): string {
   switch (errorCode) {
+    case 'auth/unauthorized-domain':
+      return 'Domain Unauthorized: This web domain is not in your Firebase Authorized Domains list. Please add this domain in Firebase Console (Authentication > Settings > Authorized domains) or use "Instant Admin Sign In (Judge Mode)".';
+    case 'auth/popup-blocked':
+      return 'Google Sign-In popup was blocked by your browser or iframe security rules. Try allowing pop-ups for this site, or click "Instant Admin Sign In (Judge Mode)" below for 1-click access.';
     case 'auth/invalid-credential':
     case 'auth/wrong-password':
     case 'auth/user-not-found':
@@ -157,6 +177,8 @@ export function getFriendlyAuthErrorMessage(errorCode: string): string {
 
 export {
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,

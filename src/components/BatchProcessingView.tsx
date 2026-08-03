@@ -572,23 +572,14 @@ export const BatchProcessingView: React.FC<BatchProcessingViewProps> = ({
             <div className="space-y-2">
               <span className="text-slate-400 font-mono text-[10px] uppercase block font-semibold">RAG Grounding References:</span>
               {(!reviewingItem.retrievedRAGContext || reviewingItem.retrievedRAGContext.length === 0) ? (
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 space-y-2 text-xs">
-                  <div className="flex items-center space-x-2 font-semibold text-xs text-amber-300">
-                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>No Relevant Products Found</span>
+                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 space-y-2 text-xs">
+                  <div className="flex items-center space-x-2 font-semibold text-xs text-teal-300 font-mono">
+                    <Database className="w-4 h-4 text-teal-400 shrink-0" />
+                    <span>Catalog Benchmark Lookup</span>
                   </div>
-                  <p className="text-xs text-amber-100/90 leading-relaxed font-normal">
-                    The provided input could not be matched with sufficient confidence to any catalog records.
+                  <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                    No similar products were found in the indexed catalog. The extracted information is shown below, but it has not yet been grounded against an existing catalog entry.
                   </p>
-                  <div className="pt-2 border-t border-amber-500/20 space-y-1">
-                    <span className="text-[11px] font-semibold text-amber-300 block">Suggestions:</span>
-                    <ul className="list-disc list-inside text-[11px] text-amber-200/80 space-y-0.5 font-normal">
-                      <li>Check spelling</li>
-                      <li>Enter more product information</li>
-                      <li>Upload a technical specification</li>
-                      <li>Try a different search query</li>
-                    </ul>
-                  </div>
                 </div>
               ) : (
                 <div className="space-y-1.5 max-h-40 overflow-y-auto">
