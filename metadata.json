@@ -1,0 +1,6 @@
+{
+  "name": "ProductIQ",
+  "description": "An AI-powered product data intelligence platform transforming fragmented industrial catalogs into commerce-ready structured data.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
