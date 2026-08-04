@@ -19,6 +19,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { ChatMessage, ProductIntelligenceResult, CatalogChatResponseType } from '../types';
+import { apiFetch } from '../lib/api';
 
 interface AskCatalogViewProps {
   processedBatchItems?: ProductIntelligenceResult[];
@@ -76,7 +77,7 @@ export const AskCatalogView: React.FC<AskCatalogViewProps> = ({
     setLoading(true);
 
     try {
-      const response = await fetch('/api/catalog-chat', {
+      const response = await apiFetch('/api/catalog-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

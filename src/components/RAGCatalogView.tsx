@@ -36,6 +36,7 @@ import { RAGDashboardStats } from '../rag/types';
 import { EnterpriseAlert } from './common/EnterpriseAlert';
 import { ERROR_CATALOG, parseErrorToCatalog, CatalogErrorDetails } from '../lib/errorCatalog';
 import { MASSTEC_CATALOG_PRODUCTS } from '../data/masstecCatalog';
+import { apiFetch } from '../lib/api';
 
 function formatLastIndexed(isoString?: string): string {
   if (!isoString) return 'Today, 07:12 PM';
@@ -146,7 +147,7 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
     setMasstecStep(5);
 
     try {
-      const res = await fetch('/api/rag/ingest-masstec', {
+      const res = await apiFetch('/api/rag/ingest-masstec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -191,8 +192,8 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
     setLoading(true);
     try {
       const [statsRes, recordsRes] = await Promise.all([
-        fetch('/api/rag/stats'),
-        fetch('/api/rag/records')
+        apiFetch('/api/rag/stats'),
+        apiFetch('/api/rag/records')
       ]);
 
       if (statsRes.ok) {
@@ -305,7 +306,7 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
     setIngestFeedback(null);
 
     try {
-      const res = await fetch('/api/rag/ingest', {
+      const res = await apiFetch('/api/rag/ingest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -364,7 +365,7 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
         sourceName: 'Admin Manual Entry'
       };
 
-      const res = await fetch('/api/rag/ingest', {
+      const res = await apiFetch('/api/rag/ingest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -401,7 +402,7 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
   // Handle Delete Record
   const handleDeleteRecord = async (id: string) => {
     try {
-      const res = await fetch(`/api/rag/records/${id}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/rag/records/${id}`, { method: 'DELETE' });
       if (res.ok) {
         fetchRAGData();
         setActivityLogs((prev) => [
@@ -424,7 +425,7 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
     setIsRebuilding(true);
     setRebuildMessage(null);
     try {
-      const res = await fetch('/api/rag/rebuild', { method: 'POST' });
+      const res = await apiFetch('/api/rag/rebuild', { method: 'POST' });
       const data = await res.json();
       if (res.ok) {
         setRebuildMessage(`Index rebuilt successfully! Recomputed ${data.count} embeddings in ${data.durationMs}ms.`);
@@ -473,7 +474,7 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
     if (!testQuery.trim()) return;
     setIsTestingQuery(true);
     try {
-      const res = await fetch('/api/rag/search', {
+      const res = await apiFetch('/api/rag/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: testQuery, topK: 4 })

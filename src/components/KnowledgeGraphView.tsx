@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GitFork, AlertTriangle, ShieldCheck, Plus, CheckCircle2, X } from 'lucide-react';
 import { KnowledgeGraphRule } from '../types';
 import { MATERIAL_PRESSURE_LIMITS } from '../data/knowledgeGraphRules';
+import { apiFetch } from '../lib/api';
 
 interface KnowledgeGraphViewProps {
   userRole?: 'demo' | 'admin';
@@ -28,7 +29,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
   const fetchRules = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/knowledge-graph');
+      const res = await apiFetch('/api/knowledge-graph');
       const data = await res.json();
       setRules(data || []);
     } catch (err) {
@@ -54,7 +55,7 @@ export const KnowledgeGraphView: React.FC<KnowledgeGraphViewProps> = ({
         notes: newRule.notes
       };
 
-      const res = await fetch('/api/knowledge-graph/rule', {
+      const res = await apiFetch('/api/knowledge-graph/rule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

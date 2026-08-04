@@ -21,6 +21,7 @@ import { EnterpriseAlert } from './common/EnterpriseAlert';
 import { ERROR_CATALOG, parseErrorToCatalog, CatalogErrorDetails } from '../lib/errorCatalog';
 import { AIProcessingWorkflow } from './AIProcessingWorkflow';
 import { ConfidenceExplanationCard } from './common/ConfidenceExplanationCard';
+import { apiFetch } from '../lib/api';
 
 interface BatchProcessingViewProps {
   batchResults?: ProductIntelligenceResult[];
@@ -123,7 +124,7 @@ export const BatchProcessingView: React.FC<BatchProcessingViewProps> = ({
       });
 
       // Send to batch endpoint
-      const response = await fetch('/api/batch-process', {
+      const response = await apiFetch('/api/batch-process', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: itemsToProcess })

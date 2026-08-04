@@ -23,6 +23,7 @@ import { SAMPLE_PRODUCT_INPUTS, SampleProductInput } from '../data/samplePrompts
 import { EnterpriseAlert } from './common/EnterpriseAlert';
 import { ERROR_CATALOG, parseErrorToCatalog, CatalogErrorDetails } from '../lib/errorCatalog';
 import { ConfidenceExplanationCard } from './common/ConfidenceExplanationCard';
+import { apiFetch } from '../lib/api';
 
 interface SingleProductViewProps {
   onAskAboutProduct?: (productName: string) => void;
@@ -118,7 +119,7 @@ export const SingleProductView: React.FC<SingleProductViewProps> = ({ onAskAbout
     }, 2200);
 
     try {
-      const response = await fetch('/api/process-product', {
+      const response = await apiFetch('/api/process-product', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
