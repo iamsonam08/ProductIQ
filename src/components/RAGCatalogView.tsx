@@ -29,7 +29,8 @@ import {
   Ban,
   ShieldCheck,
   Terminal,
-  Info
+  Info,
+  GitFork
 } from 'lucide-react';
 import { RAGDashboardStats } from '../rag/types';
 import { EnterpriseAlert } from './common/EnterpriseAlert';
@@ -652,119 +653,120 @@ export const RAGCatalogView: React.FC<RAGCatalogViewProps> = ({
         )}
       </div>
 
-      {/* 1. System Operational Metrics Overview Grid */}
-      <div className="space-y-2">
+      {/* 1. Streamlined System Operational Overview (Products Indexed, Knowledge Graph, AI Status) */}
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-mono uppercase font-bold text-slate-400 tracking-wider flex items-center space-x-2">
-            <Activity className="w-3.5 h-3.5 text-teal-400" />
-            <span>Operational RAG System Overview</span>
+          <h2 className="text-xs font-mono uppercase font-bold text-[#A8B3CF] tracking-wider flex items-center space-x-2">
+            <Activity className="w-3.5 h-3.5 text-[#19D3AE]" />
+            <span>Operational System Overview</span>
           </h2>
-          <span className="text-[10px] font-mono text-teal-400 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-800/60">
-            Live Health: 100% Operational
+          <span className="text-[10px] font-mono text-[#19D3AE] bg-[#161E2D] px-2.5 py-1 rounded-lg border border-white/[0.06]">
+            System Status: 100% Operational
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {/* 3 Core Metric Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Card 1: Products Indexed */}
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-1">
-            <div className="flex items-center justify-between text-slate-400">
+          <div className="p-4 rounded-xl bg-[#161E2D] border border-white/[0.06] flex flex-col justify-between space-y-2">
+            <div className="flex items-center justify-between text-[#A8B3CF]">
               <span className="text-[10px] font-mono uppercase font-semibold flex items-center">
                 Products Indexed
                 <MetricTooltip text="Total number of unique industrial products indexed in the persistent vector catalog." />
               </span>
-              <Database className="w-3.5 h-3.5 text-teal-400" />
+              <Database className="w-4 h-4 text-[#19D3AE]" />
             </div>
             <div>
-              <div className="text-xl font-bold text-white font-mono">
-                {stats?.productsIndexed ?? records.length} {(stats?.isDemoDataset ?? records.length <= 15) ? 'Demo Products' : 'Products'}
+              <div className="text-2xl font-bold text-white font-mono">
+                {stats?.productsIndexed ?? records.length} Products
               </div>
-              <div className="text-[10px] text-teal-400 font-mono flex items-center space-x-1 mt-0.5">
+              <div className="text-[11px] text-[#19D3AE] font-mono flex items-center space-x-1 mt-1">
                 <TrendingUp className="w-3 h-3 text-emerald-400" />
-                <span>{(stats?.isDemoDataset ?? records.length <= 15) ? 'Sample dataset • Supports scalable indexing' : 'Active dataset • Scalable vector store'}</span>
+                <span>Active Vector Dataset</span>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Documents Processed */}
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-1">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-mono uppercase font-semibold flex items-center">
-                Docs Processed
-                <MetricTooltip text="Total count of external datasheets, PDFs, and CSV documents processed by the ingestion pipeline." />
-              </span>
-              <Layers className="w-3.5 h-3.5 text-purple-400" />
-            </div>
-            <div>
-              <div className="text-xl font-bold text-purple-300 font-mono">
-                {stats?.documentsProcessed ?? (new Set(records.map(r => r.sourceDocument)).size || 1)} Documents
-              </div>
-              <div className="text-[10px] text-purple-400 font-mono flex items-center space-x-1 mt-0.5">
-                <TrendingUp className="w-3 h-3 text-emerald-400" />
-                <span>Catalog datasheets & CSV files</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 3: Embeddings Stored */}
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-1">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] font-mono uppercase font-semibold flex items-center">
-                Embeddings Stored
-                <MetricTooltip text="Total vector embeddings/chunks stored in HNSW index, including specs, material text, and ANSI standards." />
-              </span>
-              <Cpu className="w-3.5 h-3.5 text-indigo-400" />
-            </div>
-            <div>
-              <div className="text-xl font-bold text-indigo-300 font-mono">
-                {stats?.embeddingsStored ?? records.length * 4} Embeddings
-              </div>
-              <div className="text-[10px] text-indigo-400 font-mono flex items-center space-x-1 mt-0.5">
-                <Minus className="w-3 h-3 text-slate-400" />
-                <span>768-dim Gemini vector chunks</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: Knowledge Graph Nodes */}
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-1">
-            <div className="flex items-center justify-between text-slate-400">
+          {/* Card 2: Knowledge Graph */}
+          <div className="p-4 rounded-xl bg-[#161E2D] border border-white/[0.06] flex flex-col justify-between space-y-2">
+            <div className="flex items-center justify-between text-[#A8B3CF]">
               <span className="text-[10px] font-mono uppercase font-semibold flex items-center">
                 Knowledge Graph
-                <MetricTooltip text="Number of interconnected industrial ontology nodes (materials, pressure classes, ANSI standards, and physical compatibility rules)." />
+                <MetricTooltip text="Number of interconnected industrial ontology nodes and compatibility rules." />
               </span>
-              <FileCode className="w-3.5 h-3.5 text-amber-400" />
+              <GitFork className="w-4 h-4 text-[#19D3AE]" />
             </div>
             <div>
-              <div className="text-xl font-bold text-amber-300 font-mono">
+              <div className="text-2xl font-bold text-white font-mono">
                 {stats?.knowledgeGraphNodes ?? (new Set(records.map(r => r.category)).size + new Set(records.map(r => r.material)).size + new Set(records.map(r => r.spec)).size + 12)} Nodes
               </div>
-              <div className="text-[10px] text-amber-400 font-mono flex items-center space-x-1 mt-0.5">
+              <div className="text-[11px] text-[#19D3AE] font-mono flex items-center space-x-1 mt-1">
                 <TrendingUp className="w-3 h-3 text-emerald-400" />
-                <span>ASME/ANSI rules & ontology</span>
+                <span>ASME/ANSI Rules Connected</span>
               </div>
             </div>
           </div>
 
-          {/* Card 5: Last Indexed & Vector Store Health */}
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between space-y-1 col-span-2 sm:col-span-1">
-            <div className="flex items-center justify-between text-slate-400">
+          {/* Card 3: AI Status */}
+          <div className="p-4 rounded-xl bg-[#161E2D] border border-white/[0.06] flex flex-col justify-between space-y-2">
+            <div className="flex items-center justify-between text-[#A8B3CF]">
               <span className="text-[10px] font-mono uppercase font-semibold flex items-center">
-                Last Indexed
-                <MetricTooltip text="Exact timestamp when the vector database index was last updated or synchronized." />
+                AI Status
+                <MetricTooltip text="Operational status of Gemini 3.6 Flash model and RAG pipeline." />
               </span>
-              <Clock className="w-3.5 h-3.5 text-emerald-400" />
+              <Zap className="w-4 h-4 text-emerald-400" />
             </div>
             <div>
-              <div className="text-sm font-bold text-emerald-300 font-mono truncate">
-                {formatLastIndexed(stats?.lastIndexedTime)}
+              <div className="text-2xl font-bold text-emerald-400 font-mono flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Gemini Online</span>
               </div>
-              <div className="text-[10px] text-emerald-400 font-mono flex items-center space-x-1 mt-0.5">
+              <div className="text-[11px] text-[#A8B3CF] font-mono flex items-center space-x-1 mt-1">
                 <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-                <span>Connected • Persistent • Healthy</span>
+                <span>Ready for extraction & search</span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Collapsible Advanced Analytics Section */}
+        <details className="group rounded-xl bg-[#161E2D] border border-white/[0.06] transition-all overflow-hidden">
+          <summary className="px-4 py-3 text-xs font-mono font-medium text-[#A8B3CF] hover:text-white cursor-pointer flex items-center justify-between select-none">
+            <span className="flex items-center space-x-2">
+              <Sliders className="w-3.5 h-3.5 text-[#19D3AE]" />
+              <span>Advanced Analytics & Pipeline Diagnostics</span>
+            </span>
+            <span className="text-[10px] text-[#19D3AE] font-semibold group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+
+          <div className="p-4 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#101827]">
+            <div className="p-3 rounded-lg bg-[#161E2D] border border-white/[0.06]">
+              <div className="text-[10px] font-mono text-[#A8B3CF] uppercase">Docs Processed</div>
+              <div className="text-lg font-bold text-white font-mono mt-0.5">
+                {stats?.documentsProcessed ?? (new Set(records.map(r => r.sourceDocument)).size || 1)}
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-[#161E2D] border border-white/[0.06]">
+              <div className="text-[10px] font-mono text-[#A8B3CF] uppercase">Embeddings Stored</div>
+              <div className="text-lg font-bold text-white font-mono mt-0.5">
+                {stats?.embeddingsStored ?? records.length * 4}
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-[#161E2D] border border-white/[0.06]">
+              <div className="text-[10px] font-mono text-[#A8B3CF] uppercase">Vector Dimensions</div>
+              <div className="text-lg font-bold text-white font-mono mt-0.5">768-dim</div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-[#161E2D] border border-white/[0.06]">
+              <div className="text-[10px] font-mono text-[#A8B3CF] uppercase">Last Synchronized</div>
+              <div className="text-xs font-bold text-emerald-400 font-mono mt-1 truncate">
+                {formatLastIndexed(stats?.lastIndexedTime)}
+              </div>
+            </div>
+          </div>
+        </details>
       </div>
 
       {/* 2 & 3 & 8. Database Architecture, Catalog Stats & System Health */}

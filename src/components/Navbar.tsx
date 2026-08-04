@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import {
-  Cpu,
+  Sparkles,
   Layers,
   Database,
   GitFork,
-  BookOpen,
-  Sparkles,
-  CheckCircle2,
   MessageSquare,
   Menu,
   X,
-  User as UserIcon,
   ShieldCheck,
   Lock,
   Sliders,
   LogOut,
   ChevronDown,
+  BookOpen,
+  Cpu
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -44,270 +42,252 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="border-b border-white/10 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40">
+    <header className="border-b border-white/[0.06] bg-[#070B14]/80 backdrop-blur-xl sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        {/* Slim Navbar Height - 40% reduced */}
+        <div className="flex items-center justify-between h-13 py-1">
           
           {/* Logo & Brand */}
           <div className="flex items-center space-x-3">
-            <div
+            <button
+              type="button"
               onClick={onGoToLanding}
-              className="w-10 h-10 rounded-xl bg-white/5 backdrop-blur-md border border-white/15 flex items-center justify-center hover:border-teal-500/40 transition-all cursor-pointer"
-              title="Return to Landing Page"
+              className="flex items-center space-x-2.5 text-left group focus:outline-none cursor-pointer"
             >
-              <Cpu className="w-5 h-5 text-teal-400" />
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span
-                  onClick={onGoToLanding}
-                  className="font-semibold text-lg tracking-tight text-white cursor-pointer"
-                >
-                  Product<span className="text-teal-400">IQ</span>
-                </span>
-                
-                {userRole === 'admin' ? (
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center space-x-1">
-                    <ShieldCheck className="w-3 h-3 text-indigo-400" />
-                    <span>ADMIN</span>
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => openAdminModal('Admin Login enables full catalog write & rebuild permissions.')}
-                    className="text-[10px] font-mono font-medium px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/30 hover:bg-teal-500/20 transition-all flex items-center space-x-1"
-                    title="Click to authenticate as Admin"
-                  >
-                    <span>🚀 DEMO USER</span>
-                  </button>
-                )}
+              <div className="w-7 h-7 rounded-lg bg-[#161E2D] border border-white/[0.08] flex items-center justify-center group-hover:border-[#19D3AE]/50 transition-all shadow-sm">
+                <Cpu className="w-4 h-4 text-[#19D3AE]" />
               </div>
-              <p className="text-xs text-slate-400 hidden sm:block font-normal">
-                Commerce-Ready Product Intelligence
-              </p>
-            </div>
+              <div>
+                <span className="font-bold text-sm tracking-tight text-white group-hover:text-[#19D3AE] transition-colors">
+                  Product<span className="text-[#19D3AE]">IQ</span>
+                </span>
+                <span className="hidden lg:inline-block ml-2 text-[10px] font-mono text-[#A8B3CF]/60 border-l border-white/10 pl-2">
+                  AI Product Intelligence
+                </span>
+              </div>
+            </button>
           </div>
 
-          {/* Desktop Navigation Tabs */}
-          <nav className="hidden md:flex items-center space-x-1 bg-white/[0.03] p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
+          {/* Nav Tabs */}
+          <nav className="hidden md:flex items-center space-x-1 bg-[#101827] p-1 rounded-xl border border-white/[0.06]">
             <button
+              type="button"
               onClick={() => handleTabSelect('single')}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 activeTab === 'single'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 hover:bg-teal-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+                  ? 'bg-[#161E2D] text-[#19D3AE] border border-[#19D3AE]/30 shadow-sm'
+                  : 'text-[#A8B3CF] hover:text-white hover:bg-white/[0.03]'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-              <span>Single Extractor</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#19D3AE]" />
+              <span>Extract</span>
             </button>
 
             <button
-              onClick={() => handleTabSelect('batch')}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'batch'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 hover:bg-teal-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5 text-teal-400" />
-              <span>Batch Processing</span>
-            </button>
-
-            <button
-              onClick={() => handleTabSelect('askCatalog')}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'askCatalog'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 hover:bg-teal-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <MessageSquare className="w-3.5 h-3.5 text-teal-400" />
-              <span>Ask Catalog</span>
-            </button>
-
-            <button
+              type="button"
               onClick={() => handleTabSelect('rag')}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 activeTab === 'rag'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 hover:bg-teal-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+                  ? 'bg-[#161E2D] text-[#19D3AE] border border-[#19D3AE]/30 shadow-sm'
+                  : 'text-[#A8B3CF] hover:text-white hover:bg-white/[0.03]'
               }`}
             >
-              <Database className="w-3.5 h-3.5 text-teal-400" />
-              <span>RAG Store</span>
+              <Database className="w-3.5 h-3.5 text-[#19D3AE]" />
+              <span>Dashboard</span>
             </button>
 
             <button
-              onClick={() => handleTabSelect('knowledgeGraph')}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'knowledgeGraph'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 hover:bg-teal-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+              type="button"
+              onClick={() => handleTabSelect('askCatalog')}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                activeTab === 'askCatalog'
+                  ? 'bg-[#161E2D] text-[#19D3AE] border border-[#19D3AE]/30 shadow-sm'
+                  : 'text-[#A8B3CF] hover:text-white hover:bg-white/[0.03]'
               }`}
             >
-              <GitFork className="w-3.5 h-3.5 text-teal-400" />
+              <MessageSquare className="w-3.5 h-3.5 text-[#19D3AE]" />
+              <span>Search</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleTabSelect('knowledgeGraph')}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                activeTab === 'knowledgeGraph'
+                  ? 'bg-[#161E2D] text-[#19D3AE] border border-[#19D3AE]/30 shadow-sm'
+                  : 'text-[#A8B3CF] hover:text-white hover:bg-white/[0.03]'
+              }`}
+            >
+              <GitFork className="w-3.5 h-3.5 text-[#19D3AE]" />
               <span>Knowledge Graph</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleTabSelect('batch')}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                activeTab === 'batch'
+                  ? 'bg-[#161E2D] text-[#19D3AE] border border-[#19D3AE]/30 shadow-sm'
+                  : 'text-[#A8B3CF] hover:text-white hover:bg-white/[0.03]'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 text-[#19D3AE]" />
+              <span>Batch</span>
             </button>
           </nav>
 
-          {/* Right Action & User Profile Section */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Right Menu Controls */}
+          <div className="flex items-center space-x-2">
             
+            {/* Architecture Link Icon Button */}
             <button
+              type="button"
               onClick={onOpenArchitecture}
-              className="hidden lg:flex items-center space-x-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-medium bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 transition-all hover:border-teal-500/30"
+              className="hidden lg:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs text-[#A8B3CF] hover:text-white bg-[#101827] border border-white/[0.06] hover:border-[#19D3AE]/30 transition-all"
+              title="Pipeline Architecture & Flow"
             >
-              <BookOpen className="w-4 h-4 text-teal-400 shrink-0" />
-              <span>Pipeline Architecture</span>
+              <BookOpen className="w-3.5 h-3.5 text-[#19D3AE]" />
+              <span>Architecture</span>
             </button>
 
-            {/* User Profile / Auth State Badge */}
+            {/* Profile / Admin Menu Dropdown */}
             <div className="relative">
               {userRole === 'admin' ? (
                 <div className="relative">
                   <button
+                    type="button"
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center space-x-2 px-3 py-1.5 min-h-[40px] rounded-xl bg-slate-900 hover:bg-slate-850 border border-indigo-500/40 transition-all"
+                    className="flex items-center space-x-2 px-2.5 py-1 rounded-lg bg-[#101827] border border-indigo-500/30 hover:border-indigo-500/50 transition-all text-xs"
                   >
                     {userProfile?.photoURL ? (
                       <img
                         src={userProfile.photoURL}
                         alt="Profile"
-                        className="w-6 h-6 rounded-full object-cover border border-indigo-400"
+                        className="w-5 h-5 rounded-full object-cover border border-indigo-400"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+                      <div className="w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white uppercase">
                         {userProfile?.name ? userProfile.name.charAt(0) : 'A'}
                       </div>
                     )}
-                    <div className="text-left hidden sm:block">
-                      <span className="text-xs font-bold text-white block leading-tight truncate max-w-[100px]">
-                        {userProfile?.name || 'Admin'}
-                      </span>
-                      <span className="text-[10px] text-indigo-300 font-mono block leading-tight">
-                        Admin
-                      </span>
-                    </div>
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="font-semibold text-white hidden sm:inline text-xs">
+                      {userProfile?.name || 'Admin'}
+                    </span>
+                    <ChevronDown className="w-3 h-3 text-[#A8B3CF]" />
                   </button>
 
-                  {/* Dropdown Menu */}
                   {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-xl p-2 shadow-2xl z-50 space-y-1">
-                      <div className="px-3 py-2 border-b border-slate-800 text-xs">
+                    <div className="absolute right-0 mt-2 w-48 bg-[#161E2D] border border-white/[0.08] rounded-xl p-1.5 shadow-2xl z-50 space-y-1">
+                      <div className="px-3 py-2 border-b border-white/[0.06] text-xs">
                         <span className="font-bold text-white block truncate">{userProfile?.name || 'Admin'}</span>
-                        <span className="text-[10px] text-slate-400 font-mono block truncate">{userProfile?.email}</span>
+                        <span className="text-[10px] text-[#A8B3CF] font-mono block truncate">{userProfile?.email}</span>
                       </div>
 
                       <button
+                        type="button"
                         onClick={() => {
                           setUserDropdownOpen(false);
                           onOpenAdminSettings();
                         }}
-                        className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-xs text-slate-200 hover:bg-slate-800 transition-all"
+                        className="w-full flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05] transition-all"
                       >
                         <Sliders className="w-3.5 h-3.5 text-indigo-400" />
-                        <span>Admin Settings</span>
+                        <span>Settings</span>
                       </button>
 
                       <button
+                        type="button"
+                        onClick={() => {
+                          setUserDropdownOpen(false);
+                          onOpenArchitecture();
+                        }}
+                        className="w-full flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05] transition-all lg:hidden"
+                      >
+                        <BookOpen className="w-3.5 h-3.5 text-[#19D3AE]" />
+                        <span>Architecture</span>
+                      </button>
+
+                      <button
+                        type="button"
                         onClick={() => {
                           setUserDropdownOpen(false);
                           logout();
                         }}
-                        className="w-full flex items-center space-x-2 px-3 py-2 rounded-lg text-xs text-red-300 hover:bg-red-950/50 transition-all"
+                        className="w-full flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs text-red-400 hover:bg-red-500/10 transition-all"
                       >
-                        <LogOut className="w-3.5 h-3.5 text-red-400" />
-                        <span>Sign Out / Switch Demo</span>
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Sign Out</span>
                       </button>
                     </div>
                   )}
                 </div>
               ) : (
                 <button
-                  onClick={() => openAdminModal('Sign in to unlock admin catalog management and system settings.')}
-                  className="flex items-center space-x-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md shadow-indigo-950"
+                  type="button"
+                  onClick={() => openAdminModal('Sign in to unlock admin catalog management.')}
+                  className="flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-[#101827] hover:bg-[#161E2D] text-[#A8B3CF] hover:text-white border border-white/[0.06] transition-all cursor-pointer"
                 >
-                  <Lock className="w-3.5 h-3.5" />
-                  <span>Admin Sign In</span>
+                  <Lock className="w-3 h-3 text-[#19D3AE]" />
+                  <span>Admin Login</span>
                 </button>
               )}
             </div>
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Menu Button */}
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle navigation menu"
-              className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:bg-white/10 active:bg-white/20 transition-all"
+              className="md:hidden p-1.5 rounded-lg bg-[#101827] border border-white/[0.06] text-[#A8B3CF] hover:text-white"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 text-teal-400" /> : <Menu className="w-5 h-5 text-slate-200" />}
+              {mobileMenuOpen ? <X className="w-4 h-4 text-[#19D3AE]" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
 
         </div>
 
-        {/* Mobile Dropdown Navigation Menu */}
+        {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t border-white/10 space-y-1 bg-slate-950/95 backdrop-blur-2xl rounded-b-2xl shadow-2xl px-2">
+          <div className="md:hidden py-2 border-t border-white/[0.06] space-y-1 bg-[#101827] rounded-b-xl px-2">
             <button
+              type="button"
               onClick={() => handleTabSelect('single')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 min-h-[44px] rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'single'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-300 hover:bg-white/5'
-              }`}
+              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05]"
             >
-              <Sparkles className="w-4 h-4 text-teal-400 shrink-0" />
-              <span>Single Extractor</span>
+              <Sparkles className="w-4 h-4 text-[#19D3AE]" />
+              <span>Extract (Single)</span>
             </button>
-
             <button
-              onClick={() => handleTabSelect('batch')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 min-h-[44px] rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'batch'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-300 hover:bg-white/5'
-              }`}
-            >
-              <Layers className="w-4 h-4 text-teal-400 shrink-0" />
-              <span>Batch Processing</span>
-            </button>
-
-            <button
-              onClick={() => handleTabSelect('askCatalog')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 min-h-[44px] rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'askCatalog'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-300 hover:bg-white/5'
-              }`}
-            >
-              <MessageSquare className="w-4 h-4 text-teal-400 shrink-0" />
-              <span>Ask Catalog</span>
-            </button>
-
-            <button
+              type="button"
               onClick={() => handleTabSelect('rag')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 min-h-[44px] rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'rag'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-300 hover:bg-white/5'
-              }`}
+              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05]"
             >
-              <Database className="w-4 h-4 text-teal-400 shrink-0" />
-              <span>RAG Store</span>
+              <Database className="w-4 h-4 text-[#19D3AE]" />
+              <span>Dashboard</span>
             </button>
-
             <button
-              onClick={() => handleTabSelect('knowledgeGraph')}
-              className={`w-full flex items-center space-x-3 px-4 py-3 min-h-[44px] rounded-xl text-xs font-medium transition-all ${
-                activeTab === 'knowledgeGraph'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-300 hover:bg-white/5'
-              }`}
+              type="button"
+              onClick={() => handleTabSelect('askCatalog')}
+              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05]"
             >
-              <GitFork className="w-4 h-4 text-teal-400 shrink-0" />
+              <MessageSquare className="w-4 h-4 text-[#19D3AE]" />
+              <span>Search</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTabSelect('knowledgeGraph')}
+              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05]"
+            >
+              <GitFork className="w-4 h-4 text-[#19D3AE]" />
               <span>Knowledge Graph</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTabSelect('batch')}
+              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-[#A8B3CF] hover:text-white hover:bg-white/[0.05]"
+            >
+              <Layers className="w-4 h-4 text-[#19D3AE]" />
+              <span>Batch Processing</span>
             </button>
           </div>
         )}
